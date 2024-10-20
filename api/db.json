@@ -1,0 +1,30 @@
+{
+  "sites": [
+    {
+      "id": 1,
+      "url": "https://www.google.com",
+      "status": "up",
+      "lastChecked": 1729422308754,
+      "ping": 263
+    },
+    {
+      "id": 2,
+      "url": "https://www.facebook.com",
+      "status": "up",
+      "lastChecked": 1729422308723,
+      "ping": 232
+    },
+    {
+      "id": 3,
+      "url": "https://www.twitter.com",
+      "status": "up",
+      "lastChecked": 1729422309058,
+      "ping": 567
+    }
+  ],
+  "meta": {
+    "total": 3,
+    "checkStarted": 1729422308488,
+    "checkEnded": 1729339944068
+  }
+}
