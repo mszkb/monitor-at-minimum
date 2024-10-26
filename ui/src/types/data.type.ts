@@ -17,4 +17,5 @@ export interface Meta {
     total: number,
     checkStarted: string,
     checksEnded: string,
+    intervalActive: boolean,
 }

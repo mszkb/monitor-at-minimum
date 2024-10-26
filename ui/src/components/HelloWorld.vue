@@ -4,7 +4,7 @@
       <v-toolbar-title>Monitor</v-toolbar-title>
 
       <v-toolbar-items>
-        <v-btn flat icon :active="pinggingActive" @click="pinggingActive = !pinggingActive"><v-icon>mdi-access-point</v-icon></v-btn>
+        <v-btn flat icon :active="intervalActive" @click="togglePing"><v-icon>mdi-access-point</v-icon></v-btn>
       </v-toolbar-items>
     </v-toolbar>
 
@@ -36,7 +36,9 @@
                   <span>Last checked: {{ new Date(i.lastChecked) }}</span>
                 </v-card-text>
 
-                <v-card-actions class="justify-end">
+                <v-card-actions>
+                  <v-btn color="red" @click="deleteTask(i.id)">Delete</v-btn>
+                  <v-spacer></v-spacer>
                   <v-btn
                     :href="i.url"
                     target="_blank"
@@ -57,13 +59,13 @@
 </template>
 
 <script setup lang="ts">
-import { Site, Status } from "@/types/data.type";
+import { Meta, Site, Status } from "@/types/data.type";
 import { onMounted, ref } from "vue";
 
-const pinggingActive = ref(false);
 
 const loading = ref(false);
 const items = ref([] as Site[]);
+const meta = ref({} as Meta);
 
 function coloring(status: Status) {
   return status === Status.UP ? "green" : "red";
@@ -72,19 +74,40 @@ function coloring(status: Status) {
 onMounted(async () => {
   loading.value = true;
 
-  try {
-    // Fetch data
-    const response = await fetch("http://localhost:3001/list");
-    items.value = await response.json() as Site[];
-  } catch (error) {
-    console.error(error);
-  }
+  await getMeta();
+  await list();
 
   setTimeout(() => {
     loading.value = false;
   }, 1000);
   // loading.value = false;
 });
+
+async function getMeta() {
+  try {
+    const response = await fetch("http://localhost:3001/meta", {
+      method: "GET",
+    });
+
+    meta.value = await response.json() as Meta;
+
+    intervalActive.value = meta.value.intervalActive;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function list() {
+  try {
+    const response = await fetch("http://localhost:3001/list", {
+      method: "GET",
+    });
+
+    items.value = await response.json() as Site[];
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 async function update() {
   try {
@@ -97,5 +120,65 @@ async function update() {
   } catch (error) {
     console.error(error);
   }
+}
+
+async function deleteTask(idx: number) {
+  try {
+    // set post request /delete
+    const response = await fetch(`http://localhost:3001/delete/${idx}`, {
+      method: "DELETE",
+    });
+
+    items.value = await response.json() as Site[];
+  } catch (error) {
+    console.error(error);
+  }
+
+  await list();
+}
+
+const intervalActive = ref(false);
+async function togglePing() {
+  intervalActive.value = !intervalActive.value;
+
+  if (!intervalActive.value) {
+    disableInterval();
+  }
+
+  try {
+    // set post request /ping
+    const response = await fetch("http://localhost:3001/ping", {
+      method: "POST",
+    });
+
+    items.value = await response.json() as Site[];
+  } catch (error) {
+    console.error(error);
+  }
+
+  if (intervalActive.value) {
+    enableInterval();
+  }
+
+  await list();
+}
+
+let interval: any;
+function enableInterval() {
+  if (interval) {
+    clearInterval(interval);
+  }
+
+  if (!intervalActive.value) {
+    return;
+  }
+
+  interval = setInterval(async () => {
+    await list();
+  }, 5000);
+}
+
+function disableInterval() {
+  clearInterval(interval);
 }
 </script>
