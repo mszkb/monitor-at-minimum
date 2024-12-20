@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  ui:
+    build:
+      context: ./ui
+      dockerfile: ./ui/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ui:/app
+    depends_on:
+      - api
+
+  api:
+    build: 
+      context: ./api
+      dockerfile: ./api/Dockerfile
+    volumes:
+      - ./api:/app
+    ports:
+      - "5010:3000"
