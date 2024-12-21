@@ -4,31 +4,31 @@
       "id": 1,
       "url": "https://www.google.com",
       "status": "up",
-      "lastChecked": 1729934990654,
-      "ping": 308,
+      "lastChecked": 1734726242437,
+      "ping": 97,
       "type": "PING"
     },
     {
       "id": 2,
       "url": "https://www.facebook.com",
       "status": "up",
-      "lastChecked": 1729934990809,
-      "ping": 462,
+      "lastChecked": 1734726242625,
+      "ping": 284,
       "type": "PING"
     },
     {
       "id": 3,
       "url": "https://www.twitter.com",
       "status": "up",
-      "lastChecked": 1729934991151,
-      "ping": 803,
+      "lastChecked": 1734726242868,
+      "ping": 527,
       "type": "PING"
     }
   ],
   "meta": {
     "total": 3,
-    "checkStarted": 1729934990345,
-    "checkEnded": 1729934991153,
-    "intervalActive": false
+    "checkStarted": 1734726242340,
+    "checkEnded": 1734726242869,
+    "intervalActive": true
   }
 }
